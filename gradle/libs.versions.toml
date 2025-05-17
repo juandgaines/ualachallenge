@@ -70,12 +70,56 @@ androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "j
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
 androidx-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
 androidx-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
+androidx-navigation-testing = { group = "androidx.navigation", name = "navigation-testing", version.ref = "navigationTesting" }
+
+
 mockk = { group = "io.mockk", name = "mockk", version.ref = "mockk" }
 mockwebserver = { group = "com.squareup.okhttp3", name = "mockwebserver", version.ref = "mockwebserver" }
 kotlinx-coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "coroutines" }
 turbine = { group = "app.cash.turbine", name = "turbine", version.ref = "turbine" }
 truth = { group = "com.google.truth", name = "truth", version.ref = "truth" }
-androidx-navigation-testing = { group = "androidx.navigation", name = "navigation-testing", version.ref = "navigationTesting" }
+
+
+[bundles]
+networking = ["okhttp3-library", "okhttp3-logging-interceptor", "retrofit-library", "retrofit-kotlinx-serialization-converter"]
+database = ["room-ktx", "room-runtime"]
+maps = ["google-maps-android-compose", "play-services-maps"]
+android-compose-debug = [
+    "androidx-ui-test-manifest",
+    "androidx-ui-tooling",
+]
+android-presentation = [
+    "androidx-core-ktx",
+    "androidx-lifecycle-runtime-ktx",
+    "androidx-activity-compose",
+    "androidx-ui",
+    "androidx-ui-graphics",
+    "androidx-ui-tooling-preview",
+    "androidx-material3",
+    "androidx-material-icons-extended",
+]
+unit-testing = [
+    "junit",
+    "mockk",
+    "mockwebserver",
+    "kotlinx-coroutines-test",
+    "truth",
+    "turbine"
+]
+android-testing = [
+    "androidx-junit",
+    "androidx-espresso-core",
+    "androidx-navigation-testing",
+    "androidx-ui-test-junit4",
+    "junit",
+    "mockk",
+    "mockwebserver",
+    "kotlinx-coroutines-test",
+    "truth",
+    "turbine"
+]
+
+
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

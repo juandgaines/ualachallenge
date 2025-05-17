@@ -50,22 +50,13 @@ android {
 
 dependencies {
 
-    implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.lifecycle.runtime.ktx)
-    implementation(libs.androidx.activity.compose)
-    implementation(platform(libs.androidx.compose.bom))
-    implementation(libs.androidx.ui)
-    implementation(libs.androidx.ui.graphics)
-    implementation(libs.androidx.ui.tooling.preview)
-    implementation(libs.androidx.material3)
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.espresso.core)
-    androidTestImplementation(platform(libs.androidx.compose.bom))
-    androidTestImplementation(libs.androidx.ui.test.junit4)
-    debugImplementation(libs.androidx.ui.tooling)
-    debugImplementation(libs.androidx.ui.test.manifest)
 
+    implementation(libs.bundles.android.presentation)
+    implementation(platform(libs.androidx.compose.bom))
+    debugImplementation(libs.bundles.android.compose.debug)
+
+    implementation(libs.bundles.maps)
+    implementation(libs.kotlinx.coroutines.core)
     //Navigation
     implementation(libs.androidx.navigation.compose)
 
@@ -73,23 +64,18 @@ dependencies {
     implementation(libs.dagger.hilt)
     ksp(libs.dagger.hilt.compiler)
 
+    implementation(libs.kotlinx.serialization.json)
+    implementation(libs.bundles.networking)
+
+    implementation(libs.bundles.database)
+    ksp(libs.room.compiler)
+
 
     // Test dependencies
-    testImplementation(libs.junit)
-    testImplementation(libs.truth)
-    testImplementation(libs.mockk)
-    testImplementation(libs.mockwebserver)
-    testImplementation(libs.kotlinx.coroutines.test)
-    testImplementation(libs.turbine)
+    testImplementation(libs.bundles.unit.testing)
 
     // Android Test dependencies
-    androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.espresso.core)
+    androidTestImplementation(libs.bundles.android.testing)
     androidTestImplementation(platform(libs.androidx.compose.bom))
-    androidTestImplementation(libs.androidx.ui.test.junit4)
-    androidTestImplementation(libs.truth)
-    androidTestImplementation(libs.mockk)
-    androidTestImplementation(libs.kotlinx.coroutines.test)
 
-    androidTestImplementation(libs.androidx.navigation.testing)
 }
