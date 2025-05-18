@@ -70,17 +70,6 @@ fun MasterDetailMap (){
                     Text(
                         "Detail Item $number",
                         modifier = Modifier
-                            .clickable {
-                                scope.launch {
-                                    scaffoldNavigator.navigateTo(
-                                        ListDetailPaneScaffoldRole.List
-                                    )
-                                }
-                            }
-                            .then(
-                                if (isDetailVisible) Modifier.padding(16.dp)
-                                else Modifier.padding(0.dp)
-                            )
                     )
                 }
             }
