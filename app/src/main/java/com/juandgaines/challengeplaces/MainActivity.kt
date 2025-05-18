@@ -8,18 +8,21 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.adaptive.ExperimentalMaterial3AdaptiveApi
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.lifecycleScope
 import com.juandgaines.challengeplaces.domain.city.RemoteCitiesDataSource
 import com.juandgaines.challengeplaces.domain.city.CityTrie
+import com.juandgaines.challengeplaces.presentation.MasterDetailMap
 import com.juandgaines.challengeplaces.ui.theme.ChallengePlacesTheme
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+@OptIn(ExperimentalMaterial3AdaptiveApi::class)
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
@@ -30,22 +33,15 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         lifecycleScope.launch (Dispatchers.IO){
-            val cities = dataSource.getCities().getOrNull()
-            cities?.forEach {
-                citiTrie.insert(it)
-            }
-            cities
+
         }
 
         enableEdgeToEdge()
         setContent {
             ChallengePlacesTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
-                }
+                MasterDetailMap(
+
+                )
             }
         }
     }

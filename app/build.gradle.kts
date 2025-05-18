@@ -53,6 +53,7 @@ dependencies {
 
     implementation(libs.bundles.android.presentation)
     implementation(platform(libs.androidx.compose.bom))
+    implementation(libs.androidx.adaptive.navigation.android)
     debugImplementation(libs.bundles.android.compose.debug)
 
     implementation(libs.bundles.maps)
