@@ -39,7 +39,7 @@ fun MasterDetailMap (){
         }
     }
 
-    Scaffold { padding->
+    Scaffold { _->
         NavigableListDetailPaneScaffold(
             modifier = Modifier.safeContentPadding(),
             navigator = scaffoldNavigator,
