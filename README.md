@@ -1,4 +1,4 @@
-# ChallengePlaces Search Module
+# Challenge Search Places Module
 
 This module provides an autocomplete search feature for city names, balancing performance and memory use through a combination of local database queries and an in-memory Trie.
 
