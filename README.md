@@ -82,3 +82,24 @@ Let:
 ---
 
 This design ensures fast, memory-efficient autocomplete by combining selective database queries with an in-memory Trie optimized for incremental updates.
+
+
+## Tech Stack
+
+- **Language:** Kotlin 2.1.21
+- **UI:** Jetpack Compose Material 3 (androidx.compose.material3)
+- **State & Architecture:** Kotlin Coroutines, StateFlow, Clean Architecture
+- **Dependency Injection:** Hilt (Dagger)
+- **Local Storage:** Room (androidx.room)
+- **Networking:** Retrofit, OkHttp, Kotlinx Serialization
+- **Maps:** Google Maps Compose, Play Services Maps
+- **Testing:** JUnit4, MockK, Mockito, Turbine, Espresso, Compose Testing
+
+---
+
+## Configuration
+
+Before running the app, you need to provide your Google Maps API key. Add the following line to your `local.properties` file in the project root:
+
+```local.properties
+MAPS_API_KEY=your_google_maps_api_key_here
