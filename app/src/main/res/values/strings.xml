@@ -11,4 +11,6 @@
     <string name="search_screen_start_state_description">Start state</string>
     <string name="start">Type a location to find</string>
     <string name="location_not_found">Location not found with: \"%s\"</string>
+    <string name="map_screen_description">Map screen</string>
+    <string name="map_screen_marker_description">Marker</string>
 </resources>

@@ -61,48 +61,13 @@ fun MasterDetailMapRoot(viewModel: SearchLocationViewModel) {
                             )
                         }
                     }
-
-
                 }
             },
             detailPane = {
                 AnimatedPane {
-
-                    Scaffold { padding ->
-                        val cameraPositionState = rememberCameraPositionState()
-
-                        val markerPosition = remember(state.currentSelectedCity) {
-                            LatLng(
-                                (state.currentSelectedCity?.lat?.toFloat() ?: 0f).toDouble(),
-                                (state.currentSelectedCity?.lon?.toFloat() ?: 0f).toDouble()
-                            )
-                        }
-                        val marker = rememberUpdatedMarkerState(markerPosition)
-
-                        LaunchedEffect(state.currentSelectedCity) {
-                            if (state.currentSelectedCity != null) {
-                                val latLng = LatLng(
-                                    state.currentSelectedCity?.lat ?: 0.0,
-                                    state.currentSelectedCity?.lon ?: 0.0
-                                )
-                                cameraPositionState.animate(
-                                    CameraUpdateFactory.newLatLngZoom(latLng, 17f)
-                                )
-                            }
-                        }
-
-                        GoogleMap(
-                            cameraPositionState = cameraPositionState,
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .padding(padding)
-                        ) {
-                            Marker(
-                                state = marker,
-                            )
-                        }
-                    }
-
+                    DetailPlaces(
+                        state = state,
+                    )
                 }
             }
         )
