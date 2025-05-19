@@ -2,4 +2,9 @@
     <string name="app_name">Challenge Places</string>
     <string name="search_field_description">Search field</string>
     <string name="search_field_clear">Clear</string>
+    <string name="loading_description">Loading</string>
+    <string name="search_screen_description">Search Screen</string>
+    <string name="show_favorites">Show only favorites</string>
+    <string name="search_screen_check_description">Check only favorites</string>
+    <string name="search_screen_item_toggle_favorite_description">Toggle favorite</string>
 </resources>
