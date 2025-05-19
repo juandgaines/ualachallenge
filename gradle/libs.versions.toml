@@ -71,7 +71,7 @@ play-services-maps = { group = "com.google.android.gms", name = "play-services-m
 #hilt
 dagger-hilt = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt"}
 dagger-hilt-compiler = { group = "com.google.dagger", name = "hilt-android-compiler", version.ref = "hilt"}
-
+hilt-android-testing = { group = "com.google.dagger", name = "hilt-android-testing", version.ref = "hilt" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
@@ -128,7 +128,8 @@ android-testing = [
     "mockwebserver",
     "kotlinx-coroutines-test",
     "truth",
-    "turbine"
+    "turbine",
+    "hilt-android-testing"
 ]
 
 
