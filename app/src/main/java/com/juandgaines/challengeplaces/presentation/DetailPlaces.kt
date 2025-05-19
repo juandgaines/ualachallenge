@@ -2,6 +2,7 @@ package com.juandgaines.challengeplaces.presentation
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
@@ -63,9 +64,7 @@ fun DetailPlaces(
                         )
                     },
                     modifier = Modifier
-                        .semantics {
-                            contentDescription = mapScreenDescription
-                        }
+
                 )
             }
 
@@ -108,12 +107,22 @@ fun DetailPlaces(
                 .padding(padding)
         ) {
             marker?.let {
+
                 Marker(
-                    state = it,
-                   contentDescription = mapScreenMarkerDescription
+                    contentDescription = mapScreenMarkerDescription,
+                    tag = mapScreenMarkerDescription,
+                    state = it
                 )
             }
 
+        }
+        state.currentSelectedCity?.let {
+            Box(
+                modifier = Modifier
+                    .semantics {
+                        contentDescription = mapScreenMarkerDescription
+                    }
+            )
         }
     }
 }

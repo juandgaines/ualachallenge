@@ -37,7 +37,7 @@ class ListPlacesTest {
                 )
             }
         }
-
+        composeTestRule.waitForIdle()
         composeTestRule.onNodeWithContentDescription(
             context.getString(R.string.search_screen_description)
         ).assertIsDisplayed()
@@ -75,6 +75,7 @@ class ListPlacesTest {
                 )
             }
         }
+        composeTestRule.waitForIdle()
 
         composeTestRule.onNodeWithContentDescription(
             context.getString(R.string.search_screen_description)
