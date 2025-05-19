@@ -7,4 +7,8 @@
     <string name="show_favorites">Show only favorites</string>
     <string name="search_screen_check_description">Check only favorites</string>
     <string name="search_screen_item_toggle_favorite_description">Toggle favorite</string>
+    <string name="search_screen_empty_state_description">Empty state</string>
+    <string name="search_screen_start_state_description">Start state</string>
+    <string name="start">Type a location to find</string>
+    <string name="location_not_found">Location not found with: \"%s\"</string>
 </resources>

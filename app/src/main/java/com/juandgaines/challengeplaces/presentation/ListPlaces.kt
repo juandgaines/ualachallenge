@@ -50,11 +50,13 @@ fun ListPlaces(
 
             state.isLoading -> {
                 CircularProgressIndicator(
-                    modifier = Modifier.align(
-                        Alignment.Center
-                    ).semantics {
-                        contentDescription = loadingDescription
-                    }
+                    modifier = Modifier
+                        .align(
+                            Alignment.Center
+                        )
+                        .semantics {
+                            contentDescription = loadingDescription
+                        }
                 )
             }
 
@@ -102,60 +104,80 @@ fun ListPlaces(
                         }
                     }
 
-                    LazyColumn (
-                        contentPadding = PaddingValues(16.dp)
-                    ){
-                        items(
-                            state.suggestions,
-                            key = {it.id}
-                        ) { item ->
-                            Row (
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .clickable {
-                                        onAction(
-                                            CitiesIntent.OnCityClick(item)
-                                        )
-                                        navigateToDetail()
-                                    }
-                            ){
-                                Column(
-                                    modifier = Modifier.weight(1f),
-                                ) {
-                                    Text(
-                                        text = item.name + ", " + item.country,
-                                        modifier = Modifier.fillMaxWidth(),
-                                        style = MaterialTheme.typography.titleLarge
-                                    )
-                                    Text(
-                                        text = "Lat: ${item.lat}, Lon: ${item.lon}",
-                                    )
-                                    HorizontalDivider(
-                                        modifier = Modifier.fillMaxWidth()
-                                    )
-                                }
+                    if(state.suggestions.isEmpty()){
+                        Box(
+                            modifier = Modifier.fillMaxSize(),
+                            contentAlignment = Alignment.Center,
+                        ) {
 
-                                Image(
-                                    imageVector = if (
-                                        item.isFavorite
-                                    ) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
-                                    contentDescription = "Arrow",
-                                    colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.primary),
+                            Text(
+                                text = if (query.isEmpty())
+                                    stringResource(R.string.start)
+                                else
+                                    stringResource(R.string.location_not_found,query),
+                                modifier = Modifier.align(
+                                    Alignment.Center
+                                )
+                            )
+                        }
+                    }
+                    else{
+                        LazyColumn (
+                            contentPadding = PaddingValues(16.dp)
+                        ){
+                            items(
+                                state.suggestions,
+                                key = {it.id}
+                            ) { item ->
+                                Row (
                                     modifier = Modifier
-                                        .padding(16.dp)
-                                        .semantics {
-                                            contentDescription = toggleFavorite
-                                        }
+                                        .fillMaxWidth()
                                         .clickable {
                                             onAction(
-                                                CitiesIntent.ToggleFavorite(item)
+                                                CitiesIntent.OnCityClick(item)
                                             )
+                                            navigateToDetail()
                                         }
-                                        .align(Alignment.CenterVertically)
-                                )
+                                ){
+                                    Column(
+                                        modifier = Modifier.weight(1f),
+                                    ) {
+                                        Text(
+                                            text = item.name + ", " + item.country,
+                                            modifier = Modifier.fillMaxWidth(),
+                                            style = MaterialTheme.typography.titleLarge
+                                        )
+                                        Text(
+                                            text = "Lat: ${item.lat}, Lon: ${item.lon}",
+                                        )
+                                        HorizontalDivider(
+                                            modifier = Modifier.fillMaxWidth()
+                                        )
+                                    }
+
+                                    Image(
+                                        imageVector = if (
+                                            item.isFavorite
+                                        ) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
+                                        contentDescription = "Arrow",
+                                        colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.primary),
+                                        modifier = Modifier
+                                            .padding(16.dp)
+                                            .semantics {
+                                                contentDescription = toggleFavorite
+                                            }
+                                            .clickable {
+                                                onAction(
+                                                    CitiesIntent.ToggleFavorite(item)
+                                                )
+                                            }
+                                            .align(Alignment.CenterVertically)
+                                    )
+                                }
                             }
                         }
                     }
+
 
                 }
             }

@@ -6,5 +6,5 @@ interface AppDispatchers {
     val main: CoroutineDispatcher
     val io: CoroutineDispatcher
     val default: CoroutineDispatcher
-    val unconfined: kotlinx.coroutines.CoroutineDispatcher
+    val unconfined: CoroutineDispatcher
 }
