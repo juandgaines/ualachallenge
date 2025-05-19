@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Challenge Places</string>
+    <string name="search_field_description">Search field</string>
+    <string name="search_field_clear">Clear</string>
 </resources>
