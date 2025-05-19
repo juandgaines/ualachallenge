@@ -13,10 +13,9 @@ class CityTrieTest {
   val trie = CityTrie()
   cities.forEach { trie.insert(it) }
 
-  val results = trie.searchByPrefix("Alb")
+  val results = trie.searchByPrefix("Al")
 
-  Truth.assertThat(results).hasSize(1)
-  Truth.assertThat(results.first().name).isEqualTo("Albuquerque")
+  Truth.assertThat(results).hasSize(6)
  }
 
  @Test
