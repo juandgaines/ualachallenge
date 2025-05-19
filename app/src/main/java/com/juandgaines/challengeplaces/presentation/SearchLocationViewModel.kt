@@ -6,15 +6,14 @@ import com.juandgaines.challengeplaces.domain.city.CitiesRepository
 import com.juandgaines.challengeplaces.domain.city.City
 import com.juandgaines.challengeplaces.domain.city.CityTrie
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.debounce
-import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -23,11 +22,15 @@ class SearchLocationViewModel @Inject constructor(
 ): ViewModel() {
 
 
-    private val _prefixSearch = MutableStateFlow("a")
-    private val _state = MutableStateFlow(SearchState())
+    private val _eventsChannel = Channel<CitiesEvents>(Channel.BUFFERED)
+    val events = _eventsChannel
+
+    private val _query = MutableStateFlow("")
+    val query = _query
+
     private val _trie = CityTrie()
 
-    val  state = _prefixSearch
+    val  state = _query
         .onStart {
             val result = citiesRepository.getCities()
 
@@ -35,46 +38,67 @@ class SearchLocationViewModel @Inject constructor(
                 val cities = result.getOrNull()
                 if (cities != null) {
                     citiesRepository.insertCities(cities)
-                    _prefixSearch.value = "a"
                 }
             }
         }
-        .debounce(200)
-        .flowOn(Dispatchers.Default)
-        .onEach { prefix->
-            if (prefix.isEmpty()) {
-                _trie.clear()
-                _state.value = _state.value.copy(
-                    currentQuery = "",
-                    suggestions = emptyList(),
-                )
-            }
-            else {
-                if(_trie.shouldRebuildFor(prefix)){
-                    _trie.clear()
-                    val cities = citiesRepository.getCitiesByPrefix(prefix)
-                    cities.forEach { city ->
-                        _trie.insert(city)
-                    }
-                    _trie.setLastPrefix(prefix)
-                }
-            }
-        }
-        .map { prefix->
-            val suggestions = if(prefix.isEmpty()){
-                emptyList<City>()
-            }
-            else _trie.searchByPrefix(prefix)
+        .map { query->
+            val cities = if (query.isEmpty()) emptyList() else citiesRepository.getCitiesByPrefix(query)
 
-            _state.value = _state.value.copy(
-                currentQuery = prefix,
+            if (_trie.shouldRebuildFor(query)) {
+                _trie.clear()
+                cities.forEach { city ->
+                    _trie.insert(city)
+                }
+                _trie.setLastPrefix(query)
+            }
+
+            val suggestions = if (query.isEmpty()) {
+                emptyList<City>()
+            } else {
+                _trie.searchByPrefix(query)
+            }
+
+            SearchState(
+                currentQuery = query,
                 suggestions = suggestions,
+                isLoading = false,
             )
-            _state.value
 
         }.stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5000),
             initialValue = SearchState()
         )
+
+    fun onAction(intent:CitiesIntent){
+        viewModelScope.launch {
+            when(intent){
+                is CitiesIntent.OnQueryChange -> {
+                    _query.update {
+                        intent.query
+                    }
+                }
+                CitiesIntent.OnClearClick -> {
+                    _query.update {
+                        ""
+                    }
+
+                }
+                is CitiesIntent.OnCityClick -> {
+                    _eventsChannel.send(
+                        CitiesEvents.CitySelected(
+                            city = intent.city
+                        )
+                    )
+
+                }
+                CitiesIntent.NavigateBack -> {
+                    _eventsChannel.send(
+                        CitiesEvents.NavigateBack
+                    )
+                }
+            }
+        }
+
+    }
 }

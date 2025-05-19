@@ -10,30 +10,18 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.lifecycleScope
-import com.juandgaines.challengeplaces.domain.city.RemoteCitiesDataSource
-import com.juandgaines.challengeplaces.domain.city.CityTrie
 import com.juandgaines.challengeplaces.presentation.MasterDetailMapRoot
 import com.juandgaines.challengeplaces.presentation.SearchLocationViewModel
 import com.juandgaines.challengeplaces.ui.theme.ChallengePlacesTheme
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 @OptIn(ExperimentalMaterial3AdaptiveApi::class)
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
-    @Inject lateinit var dataSource:RemoteCitiesDataSource
-
-    val citiTrie = CityTrie()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        lifecycleScope.launch (Dispatchers.IO){
-
-        }
 
         enableEdgeToEdge()
         setContent {
