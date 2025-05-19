@@ -5,9 +5,6 @@ class CityTrie {
 
     private var lastPrefix: String = ""
 
-    fun peekLastPrefix(): String {
-        return lastPrefix
-    }
     fun setLastPrefix(prefix: String) {
         lastPrefix = prefix
     }
