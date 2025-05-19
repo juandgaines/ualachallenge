@@ -1,8 +1,16 @@
 package com.juandgaines.challengeplaces.presentation
 
+import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
@@ -18,14 +26,51 @@ import com.google.maps.android.compose.rememberCameraPositionState
 import com.google.maps.android.compose.rememberUpdatedMarkerState
 import com.juandgaines.challengeplaces.R
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DetailPlaces(
-    state: SearchState
+    state: SearchState,
+    isDetailVisible: Boolean,
+    onBackPressed: () -> Unit,
 ) {
     val mapScreenDescription = stringResource(R.string.map_screen_description)
     val mapScreenMarkerDescription = stringResource(R.string.map_screen_marker_description)
 
-    Scaffold { padding ->
+    BackHandler {
+        if (!isDetailVisible) {
+            onBackPressed()
+        }
+    }
+    Scaffold (
+        topBar = {
+            if (
+                !isDetailVisible
+            ) {
+                TopAppBar(
+                    navigationIcon = {
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Default.ArrowBack,
+                            contentDescription = stringResource(R.string.back_button_description),
+                            modifier = Modifier
+                                .clickable {
+                                    onBackPressed()
+                                }
+                        )
+                    },
+                    title = {
+                        Text(
+                            text = stringResource(R.string.map_screen_title)
+                        )
+                    },
+                    modifier = Modifier
+                        .semantics {
+                            contentDescription = mapScreenDescription
+                        }
+                )
+            }
+
+        }
+    ){ padding ->
         val cameraPositionState = rememberCameraPositionState()
 
         val markerPosition = remember(state.currentSelectedCity) {
