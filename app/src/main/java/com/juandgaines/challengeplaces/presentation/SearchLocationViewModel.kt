@@ -6,9 +6,12 @@ import com.juandgaines.challengeplaces.domain.city.CitiesRepository
 import com.juandgaines.challengeplaces.domain.city.City
 import com.juandgaines.challengeplaces.domain.city.CityTrie
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.stateIn
@@ -26,6 +29,7 @@ class SearchLocationViewModel @Inject constructor(
     val events = _eventsChannel
 
     private val _query = MutableStateFlow("")
+    private val _selectedCity = MutableStateFlow<City?>(null)
     val query = _query
 
     private val _trie = CityTrie()
@@ -41,6 +45,7 @@ class SearchLocationViewModel @Inject constructor(
                 }
             }
         }
+        .flowOn(Dispatchers.Default)
         .map { query->
             val cities = if (query.isEmpty()) emptyList() else citiesRepository.getCitiesByPrefix(query)
 
@@ -64,6 +69,12 @@ class SearchLocationViewModel @Inject constructor(
                 isLoading = false,
             )
 
+        }.combine(
+            _selectedCity
+        ) { state, selectedCity ->
+            state.copy(
+                currentSelectedCity = selectedCity
+            )
         }.stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5000),
@@ -85,11 +96,9 @@ class SearchLocationViewModel @Inject constructor(
 
                 }
                 is CitiesIntent.OnCityClick -> {
-                    _eventsChannel.send(
-                        CitiesEvents.CitySelected(
-                            city = intent.city
-                        )
-                    )
+                    _selectedCity.update {
+                        intent.city
+                    }
 
                 }
                 CitiesIntent.NavigateBack -> {

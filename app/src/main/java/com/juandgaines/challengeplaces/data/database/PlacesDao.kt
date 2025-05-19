@@ -14,4 +14,7 @@ interface PlacesDao{
     @Upsert
     suspend fun upsertPlaces(places: List<PlacesEntity>)
 
+    @Upsert
+    suspend fun upsertPlace(place: PlacesEntity)
+
 }

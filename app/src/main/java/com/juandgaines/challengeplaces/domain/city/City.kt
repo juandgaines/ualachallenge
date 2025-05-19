@@ -5,5 +5,6 @@ data class City(
     val name: String,
     val country: String,
     val lat: Double,
-    val lon: Double
+    val lon: Double,
+    val isFavorite: Boolean = false,
 )
