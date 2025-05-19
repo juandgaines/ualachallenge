@@ -2,14 +2,19 @@ package com.juandgaines.challengeplaces.presentation
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeContentPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.adaptive.ExperimentalMaterial3AdaptiveApi
@@ -25,6 +30,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.model.LatLng
@@ -72,7 +78,9 @@ fun MasterDetailMapRoot(viewModel: SearchLocationViewModel) {
                             else -> {
                                 Column(
                                     Modifier
-                                        .fillMaxSize()
+                                        .fillMaxSize(),
+                                    horizontalAlignment = Alignment.Start,
+                                    verticalArrangement = Arrangement.SpaceBetween
                                 ) {
                                     SearchTextField(
                                         text = query,
@@ -83,10 +91,14 @@ fun MasterDetailMapRoot(viewModel: SearchLocationViewModel) {
                                             viewModel.onAction(CitiesIntent.OnClearClick)
                                         },
                                     )
-                                    LazyColumn {
+                                    LazyColumn (
+                                        contentPadding = PaddingValues(16.dp)
+                                    ){
                                         items(state.suggestions) { item ->
                                             Column(
-                                                modifier = Modifier.clickable {
+                                                modifier = Modifier
+                                                    .fillMaxWidth()
+                                                    .clickable {
                                                     viewModel.onAction(
                                                         CitiesIntent.OnCityClick(item)
                                                     )
@@ -98,10 +110,15 @@ fun MasterDetailMapRoot(viewModel: SearchLocationViewModel) {
                                                 }
                                             ) {
                                                 Text(
-                                                    text = item.country
+                                                    text = item.name + ", "+item.country,
+                                                    modifier = Modifier.fillMaxWidth(),
+                                                    style = MaterialTheme.typography.titleLarge
                                                 )
                                                 Text(
-                                                    text = item.name
+                                                    text = "Lat: ${item.lat}, Lon: ${item.lon}",
+                                                )
+                                                HorizontalDivider(
+                                                    modifier = Modifier.fillMaxWidth()
                                                 )
                                             }
                                         }

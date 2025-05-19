@@ -9,7 +9,8 @@ fun PlacesEntity.toCity(): City {
         name = name,
         country = country,
         lat = lat,
-        lon = lon
+        lon = lon,
+        isFavorite = isFavorite
     )
 }
 
@@ -19,6 +20,7 @@ fun City.toPlacesEntity(): PlacesEntity {
         name = name,
         country = country,
         lat = lat,
-        lon = lon
+        lon = lon,
+        isFavorite = isFavorite
     )
 }
