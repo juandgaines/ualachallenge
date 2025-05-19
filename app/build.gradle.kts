@@ -2,6 +2,15 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.kotlin.serialization)
+    alias(libs.plugins.dagger.hilt)
+    alias(libs.plugins.room)
+    alias(libs.plugins.ksp)
+    alias(libs.plugins.mapsplatform.secrets.plugin)
+}
+
+room {
+    schemaDirectory("$projectDir/schemas")
 }
 
 android {
@@ -15,7 +24,7 @@ android {
         versionCode = 1
         versionName = "1.0"
 
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner = "com.juandgaines.challengeplaces.UalaPlacesTestRunner"
     }
 
     buildTypes {
@@ -37,23 +46,44 @@ android {
     buildFeatures {
         compose = true
     }
+    packaging {
+        resources {
+            excludes += "/META-INF/{AL2.0,LGPL2.1}"
+            excludes += "/META-INF/LICENSE*"
+            excludes += "/META-INF/NOTICE*"
+        }
+    }
 }
 
 dependencies {
 
-    implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.lifecycle.runtime.ktx)
-    implementation(libs.androidx.activity.compose)
+
+    implementation(libs.bundles.android.presentation)
     implementation(platform(libs.androidx.compose.bom))
-    implementation(libs.androidx.ui)
-    implementation(libs.androidx.ui.graphics)
-    implementation(libs.androidx.ui.tooling.preview)
-    implementation(libs.androidx.material3)
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.espresso.core)
+    implementation(libs.androidx.adaptive.navigation.android)
+    debugImplementation(libs.bundles.android.compose.debug)
+
+    implementation(libs.bundles.maps)
+    implementation(libs.kotlinx.coroutines.core)
+    //Navigation
+    implementation(libs.androidx.navigation.compose)
+
+    implementation(libs.dagger.hilt.navigation.compose)
+    implementation(libs.dagger.hilt)
+    ksp(libs.dagger.hilt.compiler)
+
+    implementation(libs.kotlinx.serialization.json)
+    implementation(libs.bundles.networking)
+
+    implementation(libs.bundles.database)
+    ksp(libs.room.compiler)
+
+
+    // Test dependencies
+    testImplementation(libs.bundles.unit.testing)
+
+    // Android Test dependencies
+    androidTestImplementation(libs.bundles.android.testing)
     androidTestImplementation(platform(libs.androidx.compose.bom))
-    androidTestImplementation(libs.androidx.ui.test.junit4)
-    debugImplementation(libs.androidx.ui.tooling)
-    debugImplementation(libs.androidx.ui.test.manifest)
+
 }
