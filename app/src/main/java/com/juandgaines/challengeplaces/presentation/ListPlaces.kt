@@ -42,6 +42,7 @@ fun ListPlaces(
 ) {
     val loadingDescription = stringResource(R.string.loading_description)
     val searchScreenDescription = stringResource(R.string.search_screen_description)
+    val searchScreenListDescription = stringResource(R.string.search_screen_list_description)
     val searchCheckFavoritesDescription = stringResource(R.string.search_screen_check_description)
     val toggleFavorite = stringResource(R.string.search_screen_item_toggle_favorite_description)
     val listState = rememberLazyListState()
@@ -127,7 +128,11 @@ fun ListPlaces(
                     else{
                         LazyColumn (
                             state = listState,
-                            contentPadding = PaddingValues(vertical = 8.dp)
+                            contentPadding = PaddingValues(vertical = 8.dp),
+                            modifier = Modifier
+                                .semantics {
+                                    contentDescription = searchScreenListDescription
+                                }
                         ){
                             items(
                                 state.suggestions,

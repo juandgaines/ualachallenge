@@ -81,7 +81,6 @@ class SearchLocationViewModel @Inject constructor(
             }
 
             SearchState(
-                currentQuery = query,
                 suggestions = suggestions,
                 isFavoriteFilter = favorite,
                 isLoading = false,
