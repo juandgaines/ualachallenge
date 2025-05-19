@@ -1,6 +1,7 @@
 package com.juandgaines.challengeplaces.presentation
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -12,6 +13,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
@@ -41,6 +44,7 @@ fun ListPlaces(
     val searchScreenDescription = stringResource(R.string.search_screen_description)
     val searchCheckFavoritesDescription = stringResource(R.string.search_screen_check_description)
     val toggleFavorite = stringResource(R.string.search_screen_item_toggle_favorite_description)
+    val listState = rememberLazyListState()
 
     Box(
         modifier = Modifier.fillMaxSize(),
@@ -89,7 +93,6 @@ fun ListPlaces(
                                     )
                                 },
                                 modifier = Modifier
-                                    .padding(16.dp)
                                     .semantics {
                                         contentDescription = searchCheckFavoritesDescription
                                     }
@@ -123,7 +126,8 @@ fun ListPlaces(
                     }
                     else{
                         LazyColumn (
-                            contentPadding = PaddingValues(16.dp)
+                            state = listState,
+                            contentPadding = PaddingValues(vertical = 8.dp)
                         ){
                             items(
                                 state.suggestions,
@@ -138,6 +142,18 @@ fun ListPlaces(
                                             )
                                             navigateToDetail()
                                         }
+                                        .then(
+                                            if (state.currentSelectedCity?.id == item.id) {
+                                                Modifier.border(
+                                                    width = 2.dp,
+                                                    color = MaterialTheme.colorScheme.primary,
+                                                    shape = RoundedCornerShape(8.dp)
+                                                )
+                                            } else {
+                                                Modifier
+                                            }
+                                        )
+                                        .padding(16.dp)
                                 ){
                                     Column(
                                         modifier = Modifier.weight(1f),

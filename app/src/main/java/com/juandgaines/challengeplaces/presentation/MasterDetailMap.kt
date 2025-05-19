@@ -33,6 +33,7 @@ fun MasterDetailMapRoot(viewModel: SearchLocationViewModel) {
 
     BackHandler(enabled = scaffoldNavigator.canNavigateBack()) {
         scope.launch {
+            viewModel.onAction(CitiesIntent.OnCityClick(null))
             scaffoldNavigator.navigateBack()
         }
     }
