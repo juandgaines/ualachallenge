@@ -39,4 +39,8 @@ class FakePlacesDao : PlacesDao {
     override suspend fun getPlaceById(id: Int): PlacesEntity? {
         return cities.find { it.id == id }
     }
+
+    fun clear() {
+        cities.clear()
+    }
 }

@@ -5,8 +5,6 @@ import com.juandgaines.challengeplaces.domain.city.CitiesRepository
 import com.juandgaines.challengeplaces.domain.city.City
 import com.juandgaines.challengeplaces.domain.city.LocalCitiesDataSource
 import com.juandgaines.challengeplaces.domain.city.RemoteCitiesDataSource
-import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
