@@ -103,7 +103,7 @@ class SearchLocationViewModel @Inject constructor(
         )
 
     fun onAction(intent:CitiesIntent){
-        viewModelScope.launch {
+        viewModelScope.launch(appDispatchers.main) {
             when(intent){
                 is CitiesIntent.OnQueryChange -> {
                     _query.update {

@@ -40,7 +40,7 @@ class FakePlacesDao : PlacesDao {
         return cities.find { it.id == id }
     }
 
-    fun clear() {
+    suspend fun clear() {
         cities.clear()
     }
 }
