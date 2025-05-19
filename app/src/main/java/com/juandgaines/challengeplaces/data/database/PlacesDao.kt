@@ -10,6 +10,9 @@ interface PlacesDao{
     @Query("SELECT * FROM places WHERE name LIKE :prefix || '%' ORDER BY name ASC")
     suspend fun getPlacesByNamePrefix(prefix: String): List<PlacesEntity>
 
+    @Query("SELECT * FROM places LIMIT 1")
+    suspend fun areCitiesInserted(): List<PlacesEntity>
+
     @Query("SELECT * FROM places WHERE name LIKE :prefix || '%' AND isFavorite = 1 ORDER BY name ASC")
     suspend fun getPlacesByNamePrefixAndFavorites(prefix: String): List<PlacesEntity>
 
@@ -19,5 +22,10 @@ interface PlacesDao{
 
     @Upsert
     suspend fun upsertPlace(place: PlacesEntity)
+
+    @Query ("SELECT * FROM places WHERE id = :id")
+    suspend fun getPlaceById(id: Int): PlacesEntity?
+
+
 
 }

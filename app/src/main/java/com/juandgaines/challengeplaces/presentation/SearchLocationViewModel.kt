@@ -2,11 +2,11 @@ package com.juandgaines.challengeplaces.presentation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.juandgaines.challengeplaces.domain.city.AppDispatchers
 import com.juandgaines.challengeplaces.domain.city.CitiesRepository
 import com.juandgaines.challengeplaces.domain.city.City
 import com.juandgaines.challengeplaces.domain.city.CityTrie
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -21,6 +21,7 @@ import javax.inject.Inject
 @HiltViewModel
 class SearchLocationViewModel @Inject constructor(
     private val citiesRepository: CitiesRepository,
+    private val appDispatchers: AppDispatchers
 ): ViewModel() {
 
 
@@ -30,6 +31,7 @@ class SearchLocationViewModel @Inject constructor(
     private val _query = MutableStateFlow("")
     private val _selectedCity = MutableStateFlow<City?>(null)
     private val _favorite = MutableStateFlow<Boolean>(false)
+    private val _update = MutableStateFlow(0)
 
     val query = _query
 
@@ -37,6 +39,11 @@ class SearchLocationViewModel @Inject constructor(
 
     val  state = _query
         .onStart {
+            val areInserted = citiesRepository.areCitiesInserted()
+
+            if (areInserted)
+                return@onStart
+
             val result = citiesRepository.getCities()
 
             if (result.isSuccess) {
@@ -46,9 +53,12 @@ class SearchLocationViewModel @Inject constructor(
                 }
             }
         }
-        .flowOn(Dispatchers.Default)
+        .flowOn(appDispatchers.default)
         .combine(
-            _favorite
+            combine(_favorite,_update){fav, updates->
+                _trie.clear()
+                fav
+            }
         ) { query, favorite->
             val cities = when {
                 query.isEmpty() -> emptyList()
@@ -78,7 +88,7 @@ class SearchLocationViewModel @Inject constructor(
             )
         }
         .flowOn(
-            Dispatchers.Main
+            appDispatchers.main
         )
         .combine(
             _selectedCity
@@ -121,8 +131,14 @@ class SearchLocationViewModel @Inject constructor(
                     _favorite.update {
                         intent.isFavorites
                     }
-                    _query.update {
-                        ""
+                    _update.update {
+                        _update.value + 1
+                    }
+                }
+                is CitiesIntent.ToggleFavorite -> {
+                    citiesRepository.markAsFavorite(intent.city.id)
+                    _update.update {
+                        _update.value + 1
                     }
                 }
             }

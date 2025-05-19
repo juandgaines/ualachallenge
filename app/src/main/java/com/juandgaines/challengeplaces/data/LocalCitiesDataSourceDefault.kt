@@ -17,6 +17,10 @@ class LocalCitiesDataSourceDefault @Inject constructor(
         }
     }
 
+    override suspend fun areCitiesInserted(): Boolean {
+        return dao.areCitiesInserted().isNotEmpty()
+    }
+
     override suspend fun getCitiesFavorites(query: String): List<City> {
         return dao.getPlacesByNamePrefixAndFavorites(
             query
@@ -29,6 +33,12 @@ class LocalCitiesDataSourceDefault @Inject constructor(
         dao.upsertPlaces(cities.map {
             it.toPlacesEntity()
         })
+    }
+
+    override suspend fun markAsFavorite(cityId: Int) {
+        dao.getPlaceById(cityId)?.let {
+            dao.upsertPlace(it.copy(isFavorite = !it.isFavorite))
+        }
     }
 
 }

@@ -18,6 +18,7 @@ class CityTrie {
     }
 
     fun clear() {
+        lastPrefix = ""
         root.children.clear()
         root.cities.clear()
     }

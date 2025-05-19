@@ -1,6 +1,7 @@
 package com.juandgaines.challengeplaces.data.di
 
 import com.juandgaines.challengeplaces.data.CitiesRepositoryImpl
+import com.juandgaines.challengeplaces.domain.city.AppDispatchers
 import com.juandgaines.challengeplaces.domain.city.LocalCitiesDataSource
 import com.juandgaines.challengeplaces.domain.city.CitiesRepository
 import com.juandgaines.challengeplaces.domain.city.RemoteCitiesDataSource
@@ -17,11 +18,14 @@ class RepositoryModule {
     @Singleton
     fun provideRepository(
         localCitiesDataSource: LocalCitiesDataSource,
-        remoteCitiesDataSource: RemoteCitiesDataSource
+        remoteCitiesDataSource: RemoteCitiesDataSource,
+        appDispatchers: AppDispatchers
     ): CitiesRepository {
         return CitiesRepositoryImpl(
             localCitiesDataSource = localCitiesDataSource,
-            remoteCitiesDataSource = remoteCitiesDataSource
+            remoteCitiesDataSource = remoteCitiesDataSource,
+            appDispatchers = appDispatchers
+
         )
     }
 }
