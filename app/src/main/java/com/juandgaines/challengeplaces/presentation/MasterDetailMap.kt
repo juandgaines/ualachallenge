@@ -2,10 +2,10 @@ package com.juandgaines.challengeplaces.presentation
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.safeContentPadding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.adaptive.ExperimentalMaterial3AdaptiveApi
@@ -16,22 +16,18 @@ import androidx.compose.material3.adaptive.navigation.NavigableListDetailPaneSca
 import androidx.compose.material3.adaptive.navigation.rememberListDetailPaneScaffoldNavigator
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.coroutines.launch
 
 @ExperimentalMaterial3AdaptiveApi
 @Composable
-fun MasterDetailMap (){
+fun MasterDetailMapRoot(viewModel: SearchLocationViewModel) {
     val scaffoldNavigator = rememberListDetailPaneScaffoldNavigator<Any>()
     val scope = rememberCoroutineScope()
 
-    var number by remember { mutableIntStateOf(0) }
+    val state by viewModel.state.collectAsStateWithLifecycle()
 
     BackHandler(enabled = scaffoldNavigator.canNavigateBack()) {
         scope.launch {
@@ -46,19 +42,24 @@ fun MasterDetailMap (){
             listPane = {
                 AnimatedPane {
                     LazyColumn {
-                        items(100) { index ->
-
-                            Text(
+                        items(state.suggestions){ item->
+                            Column (
                                 modifier = Modifier.clickable {
-                                    number = index
+                                    //Todo: Select item
                                     scope.launch {
                                         scaffoldNavigator.navigateTo(
                                             ListDetailPaneScaffoldRole.Detail
                                         )
                                     }
-                                },
-                                text = "Item $index"
-                            )
+                                }
+                            ){
+                                Text(
+                                    text = item.country
+                                )
+                                Text(
+                                    text = item.name
+                                )
+                            }
                         }
                     }
                 }
@@ -68,7 +69,7 @@ fun MasterDetailMap (){
                     val isDetailVisible =
                         scaffoldNavigator.scaffoldValue[ListDetailPaneScaffoldRole.Detail] == PaneAdaptedValue.Expanded
                     Text(
-                        "Detail Item $number",
+                        "Detail Item",
                         modifier = Modifier
                     )
                 }

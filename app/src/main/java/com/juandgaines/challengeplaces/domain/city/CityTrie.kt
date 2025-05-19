@@ -3,6 +3,25 @@ package com.juandgaines.challengeplaces.domain.city
 class CityTrie {
     private val root = TrieNode()
 
+    private var lastPrefix: String = ""
+
+    fun peekLastPrefix(): String {
+        return lastPrefix
+    }
+    fun setLastPrefix(prefix: String) {
+        lastPrefix = prefix
+    }
+
+    fun shouldRebuildFor(prefix: String): Boolean {
+        if (lastPrefix.isEmpty()) return true
+        return !prefix.startsWith(lastPrefix)
+    }
+
+    fun clear() {
+        root.children.clear()
+        root.cities.clear()
+    }
+
     fun insert(city: City) {
         var node = root
         for (char in city.name.lowercase()) {
@@ -13,6 +32,7 @@ class CityTrie {
     }
 
     fun searchByPrefix(prefix: String): List<City> {
+
         var node = root
         for (char in prefix.lowercase()) {
             node = node.children[char] ?: return emptyList()
