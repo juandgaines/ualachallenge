@@ -45,7 +45,7 @@ class E2ETest {
     @Before
     fun init() {
         hiltRule.inject()
-        // Clear the database before each test
+
         runBlocking {
             reInsertCities()
         }
