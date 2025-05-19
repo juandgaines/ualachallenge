@@ -1,19 +1,14 @@
 package com.juandgaines.challengeplaces.domain.city
 
 import com.google.common.truth.Truth
+import com.juandgaines.challengeplaces.utils.providerCities
 import org.junit.Test
 
 class CityTrieTest {
 
  @Test
  fun whenInsertedCities_thenSearchCorrectPrefixCity_shouldReturnOneSuggestion() {
-  val cities = listOf(
-   City(1, "Alabama", "US", 0.0, 0.0),
-   City(2, "Albuquerque", "US", 0.0, 0.0),
-   City(3, "Anaheim", "US", 0.0, 0.0),
-   City(4, "Arizona", "US", 0.0, 0.0),
-   City(5, "Sydney", "AU", 0.0, 0.0)
-  )
+  val cities = providerCities
 
   val trie = CityTrie()
   cities.forEach { trie.insert(it) }
@@ -26,13 +21,7 @@ class CityTrieTest {
 
  @Test
  fun whenInsertedCities_thenSearchIncorrectPrefixCity_shouldReturnNoSuggestions() {
-  val cities = listOf(
-   City(1, "Alabama", "US", 0.0, 0.0),
-   City(2, "Albuquerque", "US", 0.0, 0.0),
-   City(3, "Anaheim", "US", 0.0, 0.0),
-   City(4, "Arizona", "US", 0.0, 0.0),
-   City(5, "Sydney", "AU", 0.0, 0.0)
-  )
+  val cities = providerCities
 
   val trie = CityTrie()
   cities.forEach { trie.insert(it) }
