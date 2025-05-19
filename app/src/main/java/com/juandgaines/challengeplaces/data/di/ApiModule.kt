@@ -1,7 +1,7 @@
 package com.juandgaines.challengeplaces.data.di
 
-import com.juandgaines.challengeplaces.data.CitiesApi
 import com.juandgaines.challengeplaces.data.RemoteCitiesDataSourceDefault
+import com.juandgaines.challengeplaces.data.network.CitiesApi
 import com.juandgaines.challengeplaces.domain.city.RemoteCitiesDataSource
 import dagger.Module
 import dagger.Provides

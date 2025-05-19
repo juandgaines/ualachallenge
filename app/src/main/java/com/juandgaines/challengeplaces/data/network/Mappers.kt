@@ -1,4 +1,4 @@
-package com.juandgaines.challengeplaces.data
+package com.juandgaines.challengeplaces.data.network
 
 import com.juandgaines.challengeplaces.domain.city.City
 
