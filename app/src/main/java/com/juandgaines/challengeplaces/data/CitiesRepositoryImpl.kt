@@ -20,6 +20,10 @@ class CitiesRepositoryImpl @Inject constructor(
         localCitiesDataSource.getCities(prefix)
     }
 
+    override suspend fun getCitiesByPrefixAndFavorites(prefix: String): List<City>  = withContext(Dispatchers.IO) {
+        localCitiesDataSource.getCitiesFavorites(prefix)
+    }
+
     override suspend fun insertCities(cities: List<City>) = withContext(Dispatchers.IO) {
         localCitiesDataSource.upsert(cities)
     }

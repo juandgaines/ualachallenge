@@ -6,5 +6,7 @@ interface CitiesRepository {
 
     suspend fun getCitiesByPrefix(prefix: String): List<City>
 
+    suspend fun getCitiesByPrefixAndFavorites(prefix: String): List<City>
+
     suspend fun insertCities(cities: List<City>)
 }

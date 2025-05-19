@@ -17,6 +17,14 @@ class LocalCitiesDataSourceDefault @Inject constructor(
         }
     }
 
+    override suspend fun getCitiesFavorites(query: String): List<City> {
+        return dao.getPlacesByNamePrefixAndFavorites(
+            query
+        ).map {
+            it.toCity()
+        }
+    }
+
     override suspend fun upsert(cities: List<City>) {
         dao.upsertPlaces(cities.map {
             it.toPlacesEntity()

@@ -12,7 +12,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flowOn
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
@@ -30,6 +29,8 @@ class SearchLocationViewModel @Inject constructor(
 
     private val _query = MutableStateFlow("")
     private val _selectedCity = MutableStateFlow<City?>(null)
+    private val _favorite = MutableStateFlow<Boolean>(false)
+
     val query = _query
 
     private val _trie = CityTrie()
@@ -46,8 +47,14 @@ class SearchLocationViewModel @Inject constructor(
             }
         }
         .flowOn(Dispatchers.Default)
-        .map { query->
-            val cities = if (query.isEmpty()) emptyList() else citiesRepository.getCitiesByPrefix(query)
+        .combine(
+            _favorite
+        ) { query, favorite->
+            val cities = when {
+                query.isEmpty() -> emptyList()
+                favorite -> citiesRepository.getCitiesByPrefixAndFavorites(query)
+                else -> citiesRepository.getCitiesByPrefix(query)
+            }
 
             if (_trie.shouldRebuildFor(query)) {
                 _trie.clear()
@@ -66,10 +73,14 @@ class SearchLocationViewModel @Inject constructor(
             SearchState(
                 currentQuery = query,
                 suggestions = suggestions,
+                isFavoriteFilter = favorite,
                 isLoading = false,
             )
-
-        }.combine(
+        }
+        .flowOn(
+            Dispatchers.Main
+        )
+        .combine(
             _selectedCity
         ) { state, selectedCity ->
             state.copy(
@@ -105,6 +116,14 @@ class SearchLocationViewModel @Inject constructor(
                     _eventsChannel.send(
                         CitiesEvents.NavigateBack
                     )
+                }
+                is CitiesIntent.OnShowFavorites -> {
+                    _favorite.update {
+                        intent.isFavorites
+                    }
+                    _query.update {
+                        ""
+                    }
                 }
             }
         }

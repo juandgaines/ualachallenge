@@ -6,12 +6,14 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeContentPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.Checkbox
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
@@ -58,7 +60,9 @@ fun MasterDetailMapRoot(viewModel: SearchLocationViewModel) {
     ) { paddingValues ->
 
         NavigableListDetailPaneScaffold(
-            modifier = Modifier.fillMaxSize().safeContentPadding(),
+            modifier = Modifier
+                .fillMaxSize()
+                .safeContentPadding(),
             navigator = scaffoldNavigator,
             listPane = {
                 AnimatedPane {
@@ -82,32 +86,56 @@ fun MasterDetailMapRoot(viewModel: SearchLocationViewModel) {
                                     horizontalAlignment = Alignment.Start,
                                     verticalArrangement = Arrangement.SpaceBetween
                                 ) {
-                                    SearchTextField(
-                                        text = query,
-                                        onTextChange = { newText ->
-                                            viewModel.onAction(CitiesIntent.OnQueryChange(newText))
-                                        },
-                                        onClearClick = {
-                                            viewModel.onAction(CitiesIntent.OnClearClick)
-                                        },
-                                    )
+                                    Column {
+                                        SearchTextField(
+                                            text = query,
+                                            onTextChange = { newText ->
+                                                viewModel.onAction(CitiesIntent.OnQueryChange(newText))
+                                            },
+                                            onClearClick = {
+                                                viewModel.onAction(CitiesIntent.OnClearClick)
+                                            },
+                                        )
+                                        Row {
+                                            Checkbox(
+                                                checked = state.isFavoriteFilter,
+                                                onCheckedChange = {
+                                                    viewModel.onAction(
+                                                        CitiesIntent.OnShowFavorites(it)
+                                                    )
+                                                },
+                                                modifier = Modifier.padding(16.dp)
+                                            )
+                                            Text(
+                                                text = "Show only favorites",
+                                                style = MaterialTheme.typography.titleMedium,
+                                                modifier = Modifier
+                                                    .align(Alignment.CenterVertically)
+                                                    .padding(start = 8.dp)
+                                            )
+                                        }
+                                    }
+
                                     LazyColumn (
                                         contentPadding = PaddingValues(16.dp)
                                     ){
-                                        items(state.suggestions) { item ->
+                                        items(
+                                            state.suggestions,
+                                            key = {it.id}
+                                        ) { item ->
                                             Column(
                                                 modifier = Modifier
                                                     .fillMaxWidth()
                                                     .clickable {
-                                                    viewModel.onAction(
-                                                        CitiesIntent.OnCityClick(item)
-                                                    )
-                                                    scope.launch {
-                                                        scaffoldNavigator.navigateTo(
-                                                            ListDetailPaneScaffoldRole.Detail
+                                                        viewModel.onAction(
+                                                            CitiesIntent.OnCityClick(item)
                                                         )
+                                                        scope.launch {
+                                                            scaffoldNavigator.navigateTo(
+                                                                ListDetailPaneScaffoldRole.Detail
+                                                            )
+                                                        }
                                                     }
-                                                }
                                             ) {
                                                 Text(
                                                     text = item.name + ", "+item.country,
@@ -160,7 +188,9 @@ fun MasterDetailMapRoot(viewModel: SearchLocationViewModel) {
 
                         GoogleMap(
                             cameraPositionState = cameraPositionState,
-                            modifier = Modifier.fillMaxSize().padding(padding)
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .padding(padding)
                         ) {
                             Marker(
                                 state = marker,
